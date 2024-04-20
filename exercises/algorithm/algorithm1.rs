@@ -2,11 +2,11 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
-use std::vec::*;
+//use std::vec::*;
 
 #[derive(Debug)]
 struct Node<T> {
@@ -29,13 +29,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T> Default for LinkedList<T> {
+impl<T: std::cmp::Ord> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T: std::cmp::Ord> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -69,14 +69,34 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
+
+	pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self {
 		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+		// Self {
+        //     length: 0,
+        //     start: None,
+        //     end: None,
+        // }
+        let mut tmp = LinkedList::new();
+        let mut vec = Vec::new();
+        for i in 0..list_a.length {
+            let v = list_a.get(i as i32).unwrap();
+            let val = unsafe { std::ptr::from_ref(v).read_volatile() };
+            vec.push(val);
         }
+        for i in 0..list_b.length {
+            let v = list_b.get(i as i32).unwrap();
+            let val = unsafe { std::ptr::from_ref(v).read_volatile() };
+            vec.push(val);
+        }
+        
+        vec.sort();
+
+        for item in vec {
+            tmp.add(item);
+        }
+
+        tmp
 	}
 }
 
@@ -171,3 +191,4 @@ mod tests {
 		}
 	}
 }
+

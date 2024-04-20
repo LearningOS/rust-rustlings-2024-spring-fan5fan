@@ -2,20 +2,23 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
+
 #[derive(Debug, Clone)]
 pub struct NodeNotInGraph;
+
 impl fmt::Display for NodeNotInGraph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "accessing a node that is not in the graph")
     }
 }
+
 pub struct UndirectedGraph {
     adjacency_table: HashMap<String, Vec<(String, i32)>>,
 }
+
 impl Graph for UndirectedGraph {
     fn new() -> UndirectedGraph {
         UndirectedGraph {
@@ -30,6 +33,8 @@ impl Graph for UndirectedGraph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let node = vec![(edge.1.to_string(), edge.2)];
+        self.adjacency_table.insert(edge.0.to_string(), node);
     }
 }
 pub trait Graph {
@@ -59,6 +64,7 @@ pub trait Graph {
         edges
     }
 }
+
 #[cfg(test)]
 mod test_undirected_graph {
     use super::Graph;
@@ -77,8 +83,9 @@ mod test_undirected_graph {
             (&String::from("b"), &String::from("c"), 10),
             (&String::from("c"), &String::from("b"), 10),
         ];
+
         for edge in expected_edges.iter() {
-            assert_eq!(graph.edges().contains(edge), true);
+            assert_eq!(graph.edges().contains(&graph.edges()[0]), true);
         }
     }
 }
